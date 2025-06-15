@@ -1,83 +1,74 @@
-# 📊 Task 1: Exploratory Data Analysis and Preprocessing
+# B5W3: Insurance Risk Analytics - Week 3
 
-## 🔍 Objective
-
-The purpose of this task was to:
-- Load and understand the structure of the raw auto insurance dataset.
-- Perform preprocessing and cleaning while preserving meaningful information.
-- Generate useful exploratory data analysis (EDA) visualizations.
-- Prepare a clean dataset to be used in the next stages of risk modeling.
+## 📁 Project Overview
+This project involves performing end-to-end data processing, exploration, and version control for South African auto insurance data. The overall goal is to build a strong foundation for risk analytics and machine learning modeling by ensuring high-quality, reproducible datasets.
 
 ---
 
-## 🗂 Data Loading
+## ✅ Task 1: Data Cleaning and Exploratory Data Analysis (EDA)
 
-- A custom delimiter detection method was implemented to correctly parse the raw CSV file.
-- Data was loaded using `pandas.read_csv()` with chunking for efficiency (`chunksize=100000`).
-- Successfully loaded over **1,000,000 rows** and **52 columns**.
+### Objectives:
+- Load the raw dataset and explore its structure.
+- Clean the data to remove or impute missing/invalid values based on logical thresholds.
+- Derive useful metrics like `loss_ratio`.
+- Visualize key features for pattern discovery and insights.
 
----
+### Key Steps:
+- Observed data types, missing values, and distributions.
+- Cleaned column names and transformed date fields.
+- Filtered rows only when at least **3 or more of the critical columns** (`totalclaims`, `totalpremium`, `gender`, `transactionmonth`) were missing.
+- Calculated `loss_ratio = totalclaims / totalpremium` where valid.
+- Removed outlier rows with unusually high `loss_ratio` (above 99th percentile).
+- Saved cleaned data to `data/cleaned/machine_learning_rating_cleaned.csv`.
 
-## 🧼 Data Cleaning Strategy
-
-The following steps were performed in `PreProcessData`:
-
-### ✔️ Column Standardization
-- Converted all column names to lowercase and replaced spaces with underscores.
-
-### ✔️ Data Type Conversion
-- Converted `transactionmonth` to datetime format.
-
-### ✔️ Loss Ratio Calculation
-- Added a new column: `loss_ratio = totalclaims / totalpremium`.
-
-### ✔️ Missing Data Handling
-- **Dropped rows** only if they had missing values in **at least 3** out of 4 critical columns:
-  - `totalclaims`
-  - `totalpremium`
-  - `gender`
-  - `transactionmonth`
-- Filled missing values:
-  - `customvalueestimate` with 0
-  - `bank` with `"Unknown"`
-  - `gender` with `"Not specified"`
-
-### ✔️ Outlier and Invalid Value Filtering
-- Filtered out rows where:
-  - `totalpremium <= 0`
-  - `totalclaims < 0`
-  - `loss_ratio` was in the top 1% outliers
-
-> ⚠️ Note: These filters were relaxed or adjusted when they caused excessive row loss.
+### Output:
+- Cleaned dataset with reliable columns and reduced noise.
+- Charts/visuals for numerical and categorical variables.
+- Validated temporal patterns, correlation matrix, and boxplots.
 
 ---
 
-## 📊 Exploratory Data Analysis (EDA)
+## ✅ Task 2: Data Version Control (DVC)
 
-Various univariate and bivariate visualizations were generated using the cleaned data:
-- Distribution plots of `totalpremium`, `totalclaims`, and `loss_ratio`.
-- Bar plots of loss ratio by `province`, `gender`, and `vehicletype`.
-- Time-series trends of `loss_ratio` across months.
-- Correlation matrix of numerical features.
-- Box plots for claims and custom value estimates.
-- Top vehicle makes by average claim amount.
+### Objectives:
+Ensure full reproducibility of data pipelines using DVC to track datasets, clean outputs, and enable auditing or rollback when needed.
 
-> Only plots with valid and sufficient data were rendered.
+### Key Steps:
+1. **Initialize DVC:**
+   ```bash
+   dvc init
+   ```
+
+2. **Configure Remote Storage:**
+   ```bash
+   mkdir ../dvc_storage
+   dvc remote add -d localstorage ../dvc_storage
+   ```
+
+3. **Track Cleaned Data:**
+   ```bash
+   dvc add data/cleaned/machine_learning_rating_cleaned.csv
+   ```
+
+4. **Commit and Push Changes:**
+   ```bash
+   git add data/cleaned/machine_learning_rating_cleaned.csv.dvc .gitignore
+   git commit -m "Track cleaned dataset with DVC"
+   dvc push
+   ```
+
+5. *(Optional)* If creating a new version (v2) of the cleaned data:
+   ```bash
+   cp data/cleaned/machine_learning_rating_cleaned.csv data/cleaned/machine_learning_rating_cleaned_v2.csv
+   dvc add data/cleaned/machine_learning_rating_cleaned_v2.csv
+   git add .
+   git commit -m "Added v2 cleaned dataset"
+   dvc push
+   ```
 
 ---
 
-## 📁 Output
-
-- Cleaned dataset saved to: `../data/cleaned/machine_learning_rating_cleaned.csv`
-- EDA visualizations displayed in notebook and console log.
-
----
-
-## ✅ Summary
-
-Task 1 successfully:
-- Loaded and inspected the dataset.
-- Applied thoughtful and assignment-aligned cleaning strategies.
-- Conducted informative visual analysis using well-prepared data.
-
-Ready to proceed to **Task 2: Statistical Testing and Hypothesis Formulation**.
+## 🧠 Notes
+- DVC helps ensure that data used in analysis or modeling is always auditable.
+- This aligns with industry standards in insurance, especially for risk assessments and regulatory compliance.
+- All work is done in branches (`task-1`, `task-2`) and merged via Pull Requests for traceability.
