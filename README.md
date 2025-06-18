@@ -1,4 +1,4 @@
-# B5W3: Insurance Risk Analytics - Week 3
+# Insurance Risk Analytics 
 
 ## 📁 Project Overview
 This project involves performing end-to-end data processing, exploration, and version control for South African auto insurance data. The overall goal is to build a strong foundation for risk analytics and machine learning modeling by ensuring high-quality, reproducible datasets.
@@ -68,7 +68,59 @@ Ensure full reproducibility of data pipelines using DVC to track datasets, clean
 
 ---
 
+## ✅ Task 3: Hypothesis Testing on Risk Drivers
+
+### Objectives:
+Statistically validate whether certain customer or regional features significantly influence insurance risk (claim frequency/severity) or profitability (margin), to inform a new risk-based segmentation strategy.
+
+### Hypotheses Tested:
+1. **H₀: No risk differences across provinces**  
+2. **H₀: No risk differences between zip codes**  
+3. **H₀: No significant margin (profit) difference between zip codes**  
+4. **H₀: No significant risk difference between Women and Men**
+
+### Key Metrics:
+- **Claim Frequency**: Proportion of policies with at least one claim  
+- **Claim Severity**: Average claim amount (given a claim occurred)  
+- **Margin**: TotalPremium - TotalClaims
+
+### Methodology:
+- **Group Segmentation**: Data was split by feature (e.g., province, zip, gender)
+- **Statistical Testing**:  
+  - T-tests were used for comparing means (claim severity and margin)
+  - Chi-squared test was considered for categorical comparisons  
+- **Significance Threshold**: α = 0.05
+
+### Key Findings:
+- ✅ **Rejected H₀ for provinces**: Statistically significant risk differences were found across provinces (p < 0.001)  
+  📌 *Recommendation*: Premiums should be adjusted regionally (e.g., Gauteng had 15% higher loss ratio than Western Cape).
+
+- ❌ **Failed to reject H₀ for zip codes** (risk and margin): No strong evidence of differentiation in claims or profit by zip.
+
+- ❌ **Failed to reject H₀ for gender**: Men and women had statistically similar risk profiles.
+
+### Output:
+- Modular Python class `HypothesisTester` created under `src/analysis/risk_hypothesis_testing.py`
+- Results returned as dictionary and integrated into notebook for interpretation
+- All findings documented with p-values and business context
+
+---
+
+### 🧪 How to Run:
+In a notebook:
+```python
+from src.analysis.risk_hypothesis_testing import HypothesisTester
+import pandas as pd
+
+df = pd.read_csv("data/cleaned/machine_learning_rating_cleaned.csv")
+tester = HypothesisTester(df)
+results = tester.run_all_tests()
+print(results)
+```
+
+---
+
 ## 🧠 Notes
 - DVC helps ensure that data used in analysis or modeling is always auditable.
 - This aligns with industry standards in insurance, especially for risk assessments and regulatory compliance.
-- All work is done in branches (`task-1`, `task-2`) and merged via Pull Requests for traceability.
+- All work is done in branches (`task-1`, `task-2`, `task-3`) and merged via Pull Requests for traceability.
