@@ -4,3 +4,8 @@ matplotlib
 seaborn
 dvc
 scipy
+scikit-learn
+xgboost
+numpy
+shap
+pytest

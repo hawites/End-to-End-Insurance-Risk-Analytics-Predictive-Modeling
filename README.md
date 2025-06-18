@@ -99,13 +99,6 @@ Statistically validate whether certain customer or regional features significant
 
 - ❌ **Failed to reject H₀ for gender**: Men and women had statistically similar risk profiles.
 
-### Output:
-- Modular Python class `HypothesisTester` created under `src/analysis/risk_hypothesis_testing.py`
-- Results returned as dictionary and integrated into notebook for interpretation
-- All findings documented with p-values and business context
-
----
-
 ### 🧪 How to Run:
 In a notebook:
 ```python
@@ -117,6 +110,30 @@ tester = HypothesisTester(df)
 results = tester.run_all_tests()
 print(results)
 ```
+
+### Output:
+- Modular Python class `HypothesisTester` created under `src/analysis/risk_hypothesis_testing.py`
+- Results returned as dictionary and integrated into notebook for interpretation
+- All findings documented with p-values and business context
+
+---
+
+## ✅ Task 4: Predictive Modeling (Risk-Based Pricing)
+
+### Objective:
+Predict claim severity (`totalclaims`) using machine learning models.
+
+### Models Implemented:
+- Linear Regression
+- Random Forest
+- XGBoost (best performer)
+
+### Evaluation:
+- RMSE and R² scores used
+- SHAP used for model explainability
+
+### Conclusion:
+XGBoost offered the most accurate predictions, with key drivers identified through SHAP. The output is ready for integration into risk-adjusted pricing models.
 
 ---
 
